@@ -125,7 +125,7 @@ The model applies augmentation inside the network:
 * Metric: Accuracy
 * Validation split: `10%`
 
-The notebook uses two callbacks:
+The notebook uses two callbacks.
 
 ### Early Stopping
 
@@ -250,7 +250,8 @@ The purpose of `testing_platform.ipynb` is to test the trained `.h5` model gener
 This testing notebook is useful when users want to:
 
 * Load a trained EMNIST `.h5` model
-* Test the model using their own handwritten digit or letter image
+* Test the model using a sample handwritten digit or letter image
+* Test the model using their own custom handwritten image
 * Change the model filename without retraining
 * Display the predicted character
 * Verify whether the saved model works correctly after training
@@ -259,14 +260,147 @@ The testing notebook does not train the model again. It only loads an existing `
 
 ---
 
+## Sample Test Images
+
+The repository includes a folder named:
+
+```bash
+sample_test_images/
+```
+
+This folder stores sample handwritten images that can be used for prediction testing in `testing_platform.ipynb`.
+
+Current sample images:
+
+```text
+sample_test_images/
+├── image_01.png
+├── image_04.png
+├── image_06.png
+├── image_07.png
+├── image_08.png
+├── image_09.png
+└── image_10.png
+```
+
+These sample images can be used directly in `testing_platform.ipynb` to check whether the trained `.h5` model can correctly predict handwritten digits and uppercase letters.
+
+To test one of the sample images, update the image path in `testing_platform.ipynb`:
+
+```python
+IMAGE_PATH = "sample_test_images/image_01.png"
+```
+
+You can change the filename to test another image:
+
+```python
+IMAGE_PATH = "sample_test_images/image_04.png"
+IMAGE_PATH = "sample_test_images/image_06.png"
+IMAGE_PATH = "sample_test_images/image_07.png"
+IMAGE_PATH = "sample_test_images/image_08.png"
+IMAGE_PATH = "sample_test_images/image_09.png"
+IMAGE_PATH = "sample_test_images/image_10.png"
+```
+
+If you want to add your own test image, place the image inside:
+
+```bash
+sample_test_images/
+```
+
+For example:
+
+```text
+sample_test_images/my_handwritten_letter.png
+```
+
+Then update the image path:
+
+```python
+IMAGE_PATH = "sample_test_images/my_handwritten_letter.png"
+```
+
+Recommended image format:
+
+```text
+PNG or JPG
+```
+
+Recommended image style:
+
+* Single handwritten character only
+* Centered character
+* High contrast
+* Minimal background noise
+* Preferably black handwriting on a white background
+
+If the image has black handwriting on a white background, use:
+
+```python
+invert=True
+```
+
+If the image already has bright handwriting on a dark background, use:
+
+```python
+invert=False
+```
+
+---
+
+## Creating the Sample Image Folder on GitHub
+
+GitHub does not save empty folders. To create the `sample_test_images/` folder directly on GitHub, create a placeholder file inside it.
+
+In GitHub, click **Add file** → **Create new file**, then type this filename:
+
+```text
+sample_test_images/.gitkeep
+```
+
+Then commit the file.
+
+This will create the folder:
+
+```text
+sample_test_images/
+└── .gitkeep
+```
+
+After that, you can upload sample images into the folder, such as:
+
+```text
+sample_test_images/image_01.png
+sample_test_images/image_04.png
+sample_test_images/image_06.png
+sample_test_images/image_07.png
+sample_test_images/image_08.png
+sample_test_images/image_09.png
+sample_test_images/image_10.png
+```
+
+---
+
 ## Testing Your Own `.h5` Model
 
-To test your own trained model, place your `.h5` file in the same folder as `testing_platform.ipynb`.
+To test your own trained model, place your `.h5` file in the same folder as `testing_platform.ipynb`, or place it inside a dedicated model folder such as:
 
-Then update the model path inside the notebook:
+```bash
+models/
+```
+
+Then update the model path inside the notebook.
+
+Example if the model is in the main repository folder:
 
 ```python
 MODEL_PATH = "EMNIST_6.35%_Yosef_Budiman.h5"
+```
+
+Example if the model is inside the `models/` folder:
+
+```python
+MODEL_PATH = "models/EMNIST_6.35%_Yosef_Budiman.h5"
 ```
 
 For example, if your model file is named:
@@ -279,6 +413,12 @@ change the code to:
 
 ```python
 MODEL_PATH = "my_emnist_model.h5"
+```
+
+or:
+
+```python
+MODEL_PATH = "models/my_emnist_model.h5"
 ```
 
 The model can then be loaded using:
@@ -416,7 +556,7 @@ Use `invert=True` when the image has black handwriting on a white background. Us
 After loading the model and defining the preprocessing function, test one image using:
 
 ```python
-IMAGE_PATH = "sample_image.png"
+IMAGE_PATH = "sample_test_images/image_01.png"
 
 image_array, display_image = preprocess_image(IMAGE_PATH, invert=True)
 
@@ -432,6 +572,12 @@ plt.imshow(display_image, cmap="gray")
 plt.title(f"Prediction: {predicted_label} ({confidence:.2f}%)")
 plt.axis("off")
 plt.show()
+```
+
+To test another sample image, only change this line:
+
+```python
+IMAGE_PATH = "sample_test_images/image_04.png"
 ```
 
 ---
@@ -474,10 +620,28 @@ Run the testing notebook cells in this order:
 3. Set the model filename
 4. Load the `.h5` model
 5. Define the image preprocessing function
-6. Set the test image path
+6. Set the sample image path
 7. Run prediction
 8. Display the predicted label and confidence
 9. Display top-5 predictions
+```
+
+Default test setup:
+
+```python
+MODEL_PATH = "EMNIST_6.35%_Yosef_Budiman.h5"
+IMAGE_PATH = "sample_test_images/image_01.png"
+```
+
+Other available sample images:
+
+```python
+IMAGE_PATH = "sample_test_images/image_04.png"
+IMAGE_PATH = "sample_test_images/image_06.png"
+IMAGE_PATH = "sample_test_images/image_07.png"
+IMAGE_PATH = "sample_test_images/image_08.png"
+IMAGE_PATH = "sample_test_images/image_09.png"
+IMAGE_PATH = "sample_test_images/image_10.png"
 ```
 
 ---
@@ -497,6 +661,12 @@ After uploading, update the filenames:
 ```python
 MODEL_PATH = "your_model_file.h5"
 IMAGE_PATH = "your_test_image.png"
+```
+
+If your test image is stored inside the sample image folder, use:
+
+```python
+IMAGE_PATH = "sample_test_images/image_01.png"
 ```
 
 Then run the prediction cells.
@@ -547,14 +717,32 @@ Or run it in Google Colab.
 jupyter notebook testing_platform.ipynb
 ```
 
-6. Update the model path and image path:
+6. Update the model path and sample image path:
 
 ```python
 MODEL_PATH = "EMNIST_6.35%_Yosef_Budiman.h5"
-IMAGE_PATH = "sample_image.png"
+IMAGE_PATH = "sample_test_images/image_01.png"
 ```
 
-7. Run the testing cells to predict your handwritten digit or letter image.
+7. Run the testing cells to predict the selected handwritten digit or letter image.
+
+8. To test another image, change only the image path:
+
+```python
+IMAGE_PATH = "sample_test_images/image_10.png"
+```
+
+9. To test your own image, place it inside:
+
+```bash
+sample_test_images/
+```
+
+Then update:
+
+```python
+IMAGE_PATH = "sample_test_images/your_image_name.png"
+```
 
 ---
 
@@ -568,13 +756,22 @@ IMAGE_PATH = "sample_image.png"
 ├── EMNIST_FULL_36.npz
 ├── Best_EMNIST_Model.h5
 ├── EMNIST_6.35%_Yosef_Budiman.h5
+├── models/
+│   └── .gitkeep
 └── sample_test_images/
-    └── sample_image.png
+    ├── .gitkeep
+    ├── image_01.png
+    ├── image_04.png
+    ├── image_06.png
+    ├── image_07.png
+    ├── image_08.png
+    ├── image_09.png
+    └── image_10.png
 ```
 
 Generated files such as `.npz` datasets and `.h5` models may not appear until the notebook has been executed.
 
-The `sample_test_images` folder is optional. It can be used to store custom handwritten images for testing.
+The `sample_test_images/` folder is used to store sample images for prediction testing. The `.gitkeep` file is only used to make sure GitHub keeps the folder even if no images have been uploaded yet.
 
 ---
 
@@ -596,6 +793,7 @@ The `sample_test_images` folder is optional. It can be used to store custom hand
 * Automatic final model naming based on test error rate
 * Separate testing notebook for `.h5` model inference
 * Adjustable model filename for testing custom trained models
+* Sample image folder for prediction testing
 * Single-image prediction support
 * Top-5 prediction confidence output
 
@@ -626,5 +824,5 @@ Created by:
 * Yosef Budiman
 * Jack Zheng
 
-Department of Mechanical Engineering
+Department of Mechanical Engineering  
 National Cheng Kung University
